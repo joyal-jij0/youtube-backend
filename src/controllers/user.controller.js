@@ -19,7 +19,7 @@ const generateAccessAndRefreshTokens = async(userId) => {
         return {accessToken, refreshToken}
 
     } catch (error) {
-        throw new ApiError(500, "Something wen wrong whiel generating refresh and access token")
+        throw new ApiError(500, "Something went wrong while generating refresh and access token")
     }
 }
 
@@ -39,7 +39,7 @@ const registerUser = asyncHandler(async (req, res) => {
     //console.log("email: ", email);
 
     if(
-        [fullName, email.username, password].some((field) => 
+        [fullName, email, username, password].some((field) => 
         field?.trim() === "")
     ){
         throw new ApiError(400, "All fields are required")
@@ -144,7 +144,7 @@ const loginUser = asyncHandler(async (req, res) => {
             {
                 user: loggedInUser, accessToken, refreshToken
             },
-            "User loggen in Succesfully "
+            "User logged in Succesfully "
         )
     )
 })
@@ -174,7 +174,7 @@ const logoutUser = asyncHandler(async(req, res) => {
     .json(new ApiResponse(200, {}, "User logged Out"))
 })
 
-const refresAccessToken = asyncHandler(async (req, res) => {
+const refreshAccessToken = asyncHandler(async (req, res) => {
     const incomingRefreshToken =  req.cookies.refreshToken || req.body.refreshToken
 
     if(!incomingRefreshToken){
@@ -202,7 +202,7 @@ const refresAccessToken = asyncHandler(async (req, res) => {
             secure: true
         }
     
-        const {accessToken, newRefreshToken} = await generateRefreshToken(user._id)
+        const {accessToken, newRefreshToken} = await generateAccessAndRefreshTokens(user._id)
     
         return res
         .status(200)
@@ -465,7 +465,7 @@ export {
     registerUser,
     loginUser,
     logoutUser,
-    refresAccessToken,
+    refreshAccessToken,
     changeCurrentPasswod,
     getCurrentUser,
     updateAccountDetails,
