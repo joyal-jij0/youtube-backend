@@ -164,7 +164,7 @@ const updateComment = asyncHandler(async(req, res) => {
         .json(new ApiResponse(200, comment, "Comment updated Successfully"))
 })
 
-const delteComment = asyncHandler(async(req, res)=> {
+const deleteComment = asyncHandler(async(req, res)=> {
     const {commentId} = req.params;
 
     if(!commentId){
@@ -200,5 +200,5 @@ export{
     getVideoComments,
     addComment,
     updateComment,
-    delteComment
+    deleteComment
 }
