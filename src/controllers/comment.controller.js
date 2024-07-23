@@ -15,6 +15,14 @@ const getVideoComments = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Invalid video Id");
     }
 
+    const user = await User.findOne({
+        refresToken: req.cookies.refresToken
+    })
+
+    if(!user){
+        throw new ApiError(404, "User not found")
+    }
+
     const pageNumber = parseInt(page);
     const limitOfComments = parseInt(limit);
 
@@ -90,7 +98,7 @@ const addComment = asyncHandler(async(req, res) => {
     }
 
     const user = await User.findOne({
-        refresToken: req.cookies.refresToken
+        refresToken: req.cookies.refreshToken
     })
 
     if(!user) {
@@ -104,7 +112,7 @@ const addComment = asyncHandler(async(req, res) => {
     }
 
     const comment = await Comment.create({
-        comment: content,
+        content,
         owner: user._id,
         video: video._id
     })
@@ -127,7 +135,7 @@ const updateComment = asyncHandler(async(req, res) => {
     }
 
     const user = await User.findOne({
-        refreshToken: req.cookies.refresToken
+        refreshToken: req.cookies.refreshToken
     })
 
     if(!user){
@@ -142,7 +150,7 @@ const updateComment = asyncHandler(async(req, res) => {
 
     const comment = await Comment.findOneAndUpdate(
         {
-            id: commentId,
+            _id: commentId,
             owner: user._id,
         },
         {
