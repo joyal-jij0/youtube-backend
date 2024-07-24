@@ -98,7 +98,7 @@ const addComment = asyncHandler(async(req, res) => {
     }
 
     const user = await User.findOne({
-        refresToken: req.cookies.refreshToken
+        refreshToken: req.cookies.refreshToken
     })
 
     if(!user) {
@@ -187,7 +187,7 @@ const deleteComment = asyncHandler(async(req, res)=> {
         throw new ApiError(400, "User not found")
     }
 
-    const deletedComment = await findOneAndDelete(
+    const deletedComment = await Comment.findOneAndDelete(
         {
             _id: commentId,
             owner: user._id
