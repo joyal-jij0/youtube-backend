@@ -13,22 +13,47 @@ const uploadOnCloudinary = async (localFilePath) => {
             return null
         }
         //upload the file on cloudinary
-        const reponse = await cloudinary.uploader.upload(localFilePath, {
+        const response = await cloudinary.uploader.upload(localFilePath, {
             resource_type: "auto"
         })
         // file has been uploaded successfully
         if (fs.existsSync(localFilePath)) {
             fs.unlinkSync(localFilePath);
         }
-        return reponse;
+        return response;
 
     } catch (error) {
         if (fs.existsSync(localFilePath)) {
             fs.unlinkSync(localFilePath); // Remove the locally saved temporary file if upload operation failed
         }
+        console.error("Cloudinary photo upload error:", error);
         return null;
     }
 }
 
+const uploadVideoOnCloudinary = async (localFilePath) => {
+    try {
+        if(!localFilePath){
+            return null
+        }
+        //upload the file on cloudinary
+        const response = await cloudinary.uploader.upload(localFilePath, {
+            resource_type: "video",
+            media_metadata: true,
+        })
+        // file has been uploaded successfully
+        if (fs.existsSync(localFilePath)) {
+            fs.unlinkSync(localFilePath);
+        }
+        return response;
 
-export {uploadOnCloudinary}
+    } catch (error) {
+        if (fs.existsSync(localFilePath)) {
+            fs.unlinkSync(localFilePath); // Remove the locally saved temporary file if upload operation failed
+        }
+        console.error("Cloudinary video upload error:", error);
+        return null;
+    }
+}
+
+export {uploadOnCloudinary, uploadVideoOnCloudinary}
